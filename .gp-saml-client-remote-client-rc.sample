@@ -1,0 +1,38 @@
+# The variable OPENCONNECT_GATEWAY_DOMAIN contains the domain name of the VPN server.
+# If the variable is not set then you will be prompted for this information every time.
+OPENCONNECT_GATEWAY_DOMAIN="vpn.example.com"
+
+# The variable OPENCONNECT_GATEWAY contains the name of the VPN gateway to connect to.
+# If the variable is not set then you will be prompted for this information every time.
+OPENCONNECT_GATEWAY="Example-Gateway"
+
+# The variable OPENCONNECT_USER contains the name of the user name to use for
+# openconnect authentication purposes.
+# If the variable is not set then you will be prompted for this information every time.
+#OPENCONNECT_USER="yourvpnuser"
+
+# The variable GP_VPN_CONTAINER_SERVER contains the URL to the
+# running gp-saml-client-remote-server instance that manages the openconnect process.
+# It defaults to http://localhost:8080. Note that because gp-saml-client-remote-server
+# does not provide any encryption, it is recommended to override the
+# run_curl_command (see the example below) and connect over SSH instead. In this
+# case GP_VPN_CONTAINER_SERVER should be set to connect to localhost.
+#GP_VPN_CONTAINER_SERVER='http://localhost:8080'
+
+# The full path to where the gp-saml-gui binary is located at.
+# See https://github.com/dlenski/gp-saml-gui for installation instructions
+#GP_SAML_GUI_BIN="$HOME/gp-saml-gui/bin/gp-saml-gui"
+
+# Any additional arguments that gp-saml-client-remote-server should pass to openconnect.
+# Consider setting the openconnect option --dtls-local-port for a UDP that is forwarded accordingly
+# The arguments should be formatted as a json array of strings.
+OPENCONNECT_ADDTL_ARGS='["--interface=tunvpn", "--disable-ipv6", "--reconnect-timeout=30"]'
+
+# This is an example that sends the curl commands on a remote server that is running
+# a docker container with the gp-saml-client-remote-server running inside the container.
+# Note that in this case GP_VPN_CONTAINER_SERVER would still be a 'localhost' URL as
+# The curl command would only locally connect to the server inside the docker container.
+#function run_curl_command() {
+#    local STDIN="$1"; shift
+#    echo "echo -n ${STDIN@Q} | ${*@Q}" | ssh root@192.168.1.3 'cd vpn-container && docker compose exec vpnclient /bin/bash -s'
+#}
