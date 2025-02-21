@@ -5,7 +5,7 @@ ARG0="$0"
 ACTION="$1";
 
 function usage() {
-    echo "Usage: $ARG0 [connect|disconnect|status]"
+    echo "Usage: $ARG0 [connect|disconnect|status|edit]"
     exit 1
 }
 
@@ -19,7 +19,9 @@ function run_curl_command() {
     cat | ${@}
 }
 
-[ ! -f "$HOME/.gp-saml-client-remote-client-rc" ] || source "$HOME/.gp-saml-client-remote-client-rc"
+CONF_FILE="$HOME/.gp-saml-client-remote-client-rc"
+
+[ ! -f "$CONF_FILE" ] || source "$CONF_FILE"
 
 GP_VPN_CONTAINER_SERVER="${GP_VPN_CONTAINER_SERVER:-http://localhost:8080}"
 if [ -z "$GP_SAML_GUI_BIN" ]; then
@@ -149,6 +151,9 @@ case $ACTION in
     status)
         echo "Status: $(req_status)"
         ;;
+    edit)
+	sensible-editor "$CONF_FILE"
+	;;
     *)
         usage
         ;;
